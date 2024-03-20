@@ -1,0 +1,161 @@
+openapi: 3.0.1
+servers:
+  - description: Index swagger
+    #url local
+    #-url: https://localhost:8080
+    #url produccion
+    url: https://api.samtel.co
+info:
+  description: Servicio de entidad Usuario.
+  version: 0.0.1
+  title: Usuarios
+  contact:
+    name: Samtel
+    url: https://www.samtel.co/
+    email: api@samtel.co
+  license:
+    name: GNU GPLv3
+    url: ‘https://www.gnu.org/licenses/gpl-3.0.html’
+tags:
+  - name: Usuarios
+    description: Gestion de usuarios
+#----------------------------
+#Endpoints de la Entidad
+#----------------------------
+paths:
+  #----------------- Crear Usuario -------
+  /v1/es/crearUsuario: #La ruta de la api
+    post:
+      tags:
+        - Crear usuario
+      operationId: crearUsuario
+      requestBody:
+        description: Crear usuario
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioTypeInput"
+      responses:
+        "200":
+          description: Usuario creado.
+          content:
+            application/json:
+              Type: array
+              schema:
+                $ref: "#/components/schemas/UsuarioTypeResponse"
+        "400":
+          description: "Parámetros de entrada no validos."
+        "404":
+          description: "No se encuentra la novedad."
+
+  #----------------- Listar Usuario ---------------
+  /v1/es/buscarUsuarioPorId/{idtbl_user}:
+    get:
+      tags:
+        - Listar usuario
+      parameters:
+        - in: path
+          name: idtbl_user   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      operationId: buscarUsuarioPorId
+      responses:
+        "200":
+          description: Usuario encontrado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UsuarioTypeResponse"
+        "400":
+          description: "Parámetros de entrada no validos."
+        "404":
+          description: "No se encuentra la novedad."
+
+  #----------- Elimina Registros ---------
+
+  /v1/es/eliminarUsuario/{idtbl_user}:
+    delete:
+      tags:
+        - eliminar usuario
+      parameters:
+        - in: path
+          name: idtbl_user   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      operationId: eliminarUsuario
+      responses:
+        "200":
+          description: Usuario eliminado.
+        "400":
+          description: "Parámetros de entrada no validos."
+        "404":
+          description: "No se encuentra la novedad."
+  #---------------------------------------------
+  #Actualiza registros
+  #---------------------------------------------
+  /v1/es/actualizaUsuario/{idtbl_user}:
+    put:
+      tags:
+        - actualiza usuario
+      parameters:
+        - in: path
+          name: idtbl_user   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      operationId: actualizaUsuario
+      requestBody:
+        description: actualizar usuario.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioTypeInput"
+        responses:
+          "200":
+            description: Usuario actualizado exitosamente.
+            content:
+              application/json:
+              schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/UsuarioTypeIResponse"
+        "400":
+          description: "Parámetros de entrada no validos."
+        "404":
+          description: "No se encuentra la novedad."
+
+#---------------------------------------------
+#Se declaran los Modelos/Schemas del servicio
+#---------------------------------------------
+components:
+  schemas:
+    UsuarioTypeResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        lastname:
+          type: string
+        createat:
+          type: string
+          format: date
+    UsuarioTypeInput:
+      type: object
+      properties:
+        name:
+          type: string
+        lastname:
+          type: string
+        createat:
+          type: string
+          format: date
